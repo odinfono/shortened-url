@@ -29,6 +29,15 @@ The service follows a **stateless RESTful API design**. It utilizes Laravel's ca
    composer install
 ```
 
+#### Copy .env.example to .env
+```sh
+cp .env.example .env
+```
+#### Generate Laravel application key
+```sh
+php artisan key:generate
+```
+
 #### Start the application server
  Run the following command:
    ```sh
