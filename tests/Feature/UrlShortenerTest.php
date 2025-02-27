@@ -6,8 +6,14 @@ use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
+/**
+ * Feature tests for the URL Shortener API.
+ */
 class UrlShortenerTest extends TestCase
 {
+    /**
+     * Tests encoding of a valid URL.
+     */
     #[Test]
     public function it_encodes_original_url()
     {
@@ -22,6 +28,10 @@ class UrlShortenerTest extends TestCase
                      'data' => ['url']
                  ]);
     }
+
+    /**
+     * Tests encoding of a very long URL.
+     */
     #[Test]
     public function it_encode_large_url()
     {
@@ -32,6 +42,10 @@ class UrlShortenerTest extends TestCase
         $response->assertStatus(200)
                  ->assertJsonStructure(['status', 'message', 'data' => ['url']]);
     }
+
+    /**
+     * Tests that an invalid URL fails validation.
+     */
     #[Test]
     public function it_requires_a_valid_url_to_encode()
     {
@@ -44,6 +58,10 @@ class UrlShortenerTest extends TestCase
                      'errors' => ["The URL format is invalid."]
                  ]);
     }
+
+    /**
+     * Tests encoding a URL and decoding it back to the original.
+     */
     #[Test]
     public function it_encode_url_to_short_url_and_back_to_original_url()
     {
@@ -64,6 +82,9 @@ class UrlShortenerTest extends TestCase
                  ]);
     }
 
+    /**
+     * Tests that decoding a non-existent short URL returns a 404.
+     */
     #[Test]
     public function it_returns_404_if_short_url_not_found()
     {
@@ -77,6 +98,9 @@ class UrlShortenerTest extends TestCase
                  ]);
     }
 
+    /**
+     * Tests that an empty short URL fails validation.
+     */
     #[Test]
     public function it_returns_422_if_short_url_is_invalid()
     {
@@ -90,6 +114,9 @@ class UrlShortenerTest extends TestCase
                  ]);
     }
 
+    /**
+     * Ensures that encoding the same URL twice does not produce duplicate short URLs.
+     */
     #[Test]
     public function it_does_not_generate_duplicate_short_urls_for_the_same_url()
     {

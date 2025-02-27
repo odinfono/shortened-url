@@ -7,12 +7,21 @@ use App\Services\UrlShortenerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Handles short URL decoding operations.
+ */
 class UrlShortenerController extends Controller
 {
+    /**
+     * Injects the URL shortener service.
+     */
     public function __construct(private readonly UrlShortenerService $urlShortenerService)
     {
     }
 
+    /**
+     * Shortens a given URL.
+     */
     public function encode(EncodeUrlRequest $request): JsonResponse
     {
         return $this->successResponse(
@@ -21,6 +30,9 @@ class UrlShortenerController extends Controller
         );
     }
 
+    /**
+     * Retrieves the original URL from a shortened URL.
+     */
     public function decode(DecodeUrlRequest $request): JsonResponse
     {
         try {
@@ -34,6 +46,10 @@ class UrlShortenerController extends Controller
             return $this->errorResponse("Error decoding URL: {$e->getMessage()}", 500);
         }
     }
+
+    /**
+     * Returns a standardized success response.
+     */
     private function successResponse(string $message, array $data = [], int $status = 200): JsonResponse
     {
         return response()->json([
@@ -42,6 +58,10 @@ class UrlShortenerController extends Controller
             'data' => $data
         ], $status);
     }
+
+    /**
+     * Returns a standardized 404 response.
+     */
     private function notFoundResponse(string $message, int $status = 404): JsonResponse
     {
         return response()->json([
@@ -51,6 +71,9 @@ class UrlShortenerController extends Controller
         ], $status);
     }
 
+    /**
+     * Returns a standardized error response.
+     */
     private function errorResponse(string $message, int $status = 400): JsonResponse
     {
         return response()->json([
